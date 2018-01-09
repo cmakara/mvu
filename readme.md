@@ -5,7 +5,7 @@
 ## How to install via npm
 
 ```js
-npm install -g mass-version-updater
+npm install -g cmakara/mvu
 ```
 
 ## Usage
