@@ -20,6 +20,6 @@
       "camelcase": "warn",
       "eqeqeq": "error",
       "semi": [2, "never"],
-      "indent": ["error", 2]
+      "indent": [2, "error"]
     }
   }

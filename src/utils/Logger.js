@@ -3,7 +3,7 @@
 var winston = require('winston')
 
 class Logger {
-  constructor () {
+  constructor() {
     this.logger = new winston.Logger({
       transports: [
         new (winston.transports.Console)({
@@ -15,27 +15,27 @@ class Logger {
     })
   }
 
-  info (msg) {
+  info(msg) {
     this.logger.info(msg)
   }
 
-  warn (msg) {
+  warn(msg) {
     this.logger.warn(msg)
   }
 
-  error (msg) {
+  error(msg) {
     this.logger.error(msg)
   }
 
-  verbose (msg) {
+  verbose(msg) {
     this.logger.log('verbose', msg)
   }
 
-  debug (msg) {
+  debug(msg) {
     this.logger.debug(msg)
   }
 
-  setLevel (level) {
+  setLevel(level) {
     this.logger.level = level
   }
 }
