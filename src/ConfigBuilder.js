@@ -186,14 +186,14 @@ async function getPathForTechs (configDict, answers) {
       configDict['technologies'][tech]['configFiles'][config] = result
     }
   }
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve) {
     resolve(configDict)
   })
 }
 
 async function getPathForTech (customizedConfigPathQuestion) {
   let result = await inquirer.prompt(customizedConfigPathQuestion)
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
     resolve(result['filePath'])
   })
 }
@@ -208,10 +208,10 @@ async function resolveVariables (stringToResolve) {
   let variableRegex = /(\{[a-zA-Z]*\})/g
   let result = stringToResolve
   let match = null
-  while ((match = variableRegex.exec(stringToResolve)) != null) {
+  while ((match = variableRegex.exec(stringToResolve)) !== null) {
     let element = match[0]
     let strippedElement = element.replace('{', '').replace('}', '')
-    if (configurationVariables[strippedElement] == null) {
+    if (configurationVariables[strippedElement] === null) {
       throw new Error(`Unknown variable: ${strippedElement}`)
     }
     result = result.replace(element, configurationVariables[strippedElement])

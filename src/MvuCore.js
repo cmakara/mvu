@@ -7,7 +7,7 @@ var Logger = require('./utils/Logger.js')
 var revertRepository = true
 const spinner = ora()
 
-async function executeUpgradeStep (stepToExecute, message) {
+async function executeUpgradeStep(stepToExecute, message) {
   spinner.start(message)
   try {
     await stepToExecute()
@@ -19,7 +19,7 @@ async function executeUpgradeStep (stepToExecute, message) {
   spinner.succeed()
 }
 
-async function executeUpgrade (workingDirectory, level) {
+async function executeUpgrade(workingDirectory, level) {
   gitHandler.repoLocation = workingDirectory
   await checkGitStatus()
   var config = await ConfigBuilder.buildConfig(workingDirectory)
@@ -42,15 +42,15 @@ async function executeUpgrade (workingDirectory, level) {
   }
 }
 
-async function checkGitStatus () {
+async function checkGitStatus() {
   var status = await gitHandler.status()
   if (status.length !== 0) {
     revertRepository = false
-    throw new Error('There are uncommited changes in the repository. Please commit or discard them before using Mvu.')
+    throw new Error('There are uncommitted changes in the repository. Please commit or discard them before using Mvu.')
   }
 }
 
-async function updateTechnologyConfigs (projectConfig, newVersion, workingDirectory) {
+async function updateTechnologyConfigs(projectConfig, newVersion, workingDirectory) {
   var results = []
   Object.keys(projectConfig['technologies']).forEach((tech) => {
     let techSection = projectConfig['technologies'][tech]
@@ -60,11 +60,11 @@ async function updateTechnologyConfigs (projectConfig, newVersion, workingDirect
   return results
 }
 
-function createConfig (pathToConfig) {
+function createConfig(pathToConfig) {
   ConfigBuilder.createConfig(pathToConfig)
 }
 
-function getPrettyConfigurationVariables (variableName = null) {
+function getPrettyConfigurationVariables() {
   let configurationVariables = ConfigBuilder.configurationVariables
   return Object.keys(configurationVariables).map((variable) => `{${variable}} - ${configurationVariables[variable]} `).join('\n')
 }

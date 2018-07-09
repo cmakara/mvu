@@ -5,17 +5,17 @@ var ora = require('ora')
 const spinner = ora()
 
 class ConfigUpdater {
-  constructor (configFiles) {
+  constructor(configFiles) {
     this.shortName = ''
     this.configFiles = configFiles
     this.getNewVersionLine = (line, version) => {
       let oldVersion = this.versionLinePattern.exec(line)[1]
       return line.replace(oldVersion, version)
     }
-    this.getVersionLine = (line) => this.versionLinePattern.exec(line) != null
+    this.getVersionLine = (line) => this.versionLinePattern.exec(line) !== null
   }
 
-  updateConfigFiles (newVersion, workingDirectory) {
+  updateConfigFiles(newVersion, workingDirectory) {
     for (let configFileName of Object.keys(this.configFiles)) {
       // Logger.info(`Updating ${this.shortName} config file ${configFileName}... \r`)
       spinner.start(`Updating ${this.shortName} config file: ${configFileName}`)
@@ -39,17 +39,17 @@ class ConfigUpdater {
 }
 
 class NpmUpdater extends ConfigUpdater {
-  constructor (configFiles) {
+  constructor(configFiles) {
     super(configFiles)
     this.shortName = 'Npm'
     this.versionLinePattern = /.*"version":\s?['"]?([a-zA-Z\d.]*)['"]?.*/g
   }
 }
 
-class YarnUpdater extends NpmUpdater {}
+class YarnUpdater extends NpmUpdater { }
 
 class GradleUpdater extends ConfigUpdater {
-  constructor (configFiles) {
+  constructor(configFiles) {
     super(configFiles)
     this.shortName = 'Gradle'
     this.versionLinePattern = /.*version=\s?['"]?([a-zA-Z\d.]*)['"]?.*/g
@@ -57,7 +57,7 @@ class GradleUpdater extends ConfigUpdater {
 }
 
 class HelmUpdater extends ConfigUpdater {
-  constructor (configFiles) {
+  constructor(configFiles) {
     super(configFiles)
     this.shortName = 'Helm'
     this.versionLinePattern = /.*version:\s?['"]?([a-zA-Z\d.]*)['"]?.*/g
@@ -65,7 +65,7 @@ class HelmUpdater extends ConfigUpdater {
 }
 
 class SetuptoolsUpdater extends ConfigUpdater {
-  constructor (configFiles) {
+  constructor(configFiles) {
     super(configFiles)
     this.shortName = 'Setuptools'
     this.versionLinePattern = /.*version=\s?['"]?([a-zA-Z\d.]*)['"]?.*/g
@@ -73,7 +73,7 @@ class SetuptoolsUpdater extends ConfigUpdater {
 }
 
 class LeiningenUpdater extends ConfigUpdater {
-  constructor (configFiles) {
+  constructor(configFiles) {
     super(configFiles)
     this.shortName = 'Leiningen'
     this.versionLinePattern = /.*\(defproject .* \s?['"]?([a-zA-Z\d.]*)['"]?.*/g
@@ -81,7 +81,7 @@ class LeiningenUpdater extends ConfigUpdater {
 }
 
 class CustomUpdater extends ConfigUpdater {
-  constructor (configFiles, regex) {
+  constructor(configFiles, regex) {
     super(configFiles)
     this.shortName = 'Custom'
     if (regex === '') {
@@ -92,7 +92,7 @@ class CustomUpdater extends ConfigUpdater {
 }
 
 class ConfigUpdaterFactory {
-  constructor () {
+  constructor() {
     this.updaterTypes = {
       'npm': {
         'Type': NpmUpdater,
@@ -121,7 +121,7 @@ class ConfigUpdaterFactory {
     }
   }
 
-  getConfigFiles (technologyName) {
+  getConfigFiles(technologyName) {
     if (this.updaterTypes[technologyName] === undefined) {
       let message = `Not known technology: ${technologyName}`
       throw new Error(message)
@@ -129,7 +129,7 @@ class ConfigUpdaterFactory {
     return this.updaterTypes[technologyName].ConfigFiles
   }
 
-  create (name, configFiles, regex = '') {
+  create(name, configFiles, regex = '') {
     name = name.toLowerCase()
     if (Object.keys(this.updaterTypes).includes(name)) {
       return new this.updaterTypes[name].Type(configFiles)
