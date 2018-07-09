@@ -5,14 +5,14 @@ this.simpleErrorHandlerWithResult = (err) => {
 }
 
 this.simpleErrorHandler = (err) => {
-  if (err !== null) {
+  if (err) {
     Logger.error(err.message)
     Logger.debug(err.stack)
   }
 }
 
 this.simplePromiseRejectHandler = (reason, p) => {
-  if (p !== null) {
+  if (p) {
     Logger.error(reason)
     Logger.debug(p)
   }

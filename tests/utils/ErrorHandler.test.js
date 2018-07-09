@@ -3,6 +3,7 @@
 var sinon = require('sinon')
 var chai = require('chai')
 var assert = chai.assert
+var expect = chai.expect
 var ErrorHandler = require('./../../src/utils/ErrorHandler.js')
 var Logger = require('../../src/utils/Logger')
 
@@ -70,7 +71,7 @@ describe('ErrorHandler', () => {
 
     it('called with null does nothing', () => {
       ErrorHandler.simplePromiseRejectHandler(null)
-      assert(loggerErrorStub.callCount === 0)
+      expect(loggerErrorStub.callCount).to.equal(0)
     })
   })
 })

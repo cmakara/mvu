@@ -4,7 +4,7 @@ this.getVersionComponents = (version) => {
 }
 
 this.getNewVersion = async (version, level) => {
-  const [major, minor, patch] = getVersionComponents(version)
+  const [major, minor, patch] = this.getVersionComponents(version)
   switch (level) {
     case 'major':
       return `${major + 1}.0.0`
