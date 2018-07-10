@@ -2,7 +2,7 @@
 
 var chai = require('chai')
 var assert = chai.assert
-var VersionHandler = require('./../src/utils/VersionHandler.js')
+var VersionHandler = require('./VersionHandler')
 
 describe('VersionHandler', () => {
   describe('getNewVersion', () => {

@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 
-var Logger = require('../../src/utils/Logger')
+var Logger = require('./Logger')
 var winston = require('winston')
 var sinon = require('sinon')
 var assert = require('chai').assert

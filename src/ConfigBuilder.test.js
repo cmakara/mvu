@@ -2,7 +2,7 @@
 
 var chai = require('chai')
 var assert = chai.assert
-var ConfigBuilder = require('./../src/ConfigBuilder.js')
+var ConfigBuilder = require('./ConfigBuilder')
 
 describe('MvuConfig', () => {
   describe('creation', () => {

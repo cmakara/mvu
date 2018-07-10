@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 
-var GitHandler = require('../../src/utils/GitHandler.js')
+var GitHandler = require('./GitHandler')
 var path = require('path')
 var chai = require('chai')
 var expect = chai.expect
@@ -9,7 +9,7 @@ var fs = require('fs')
 var osTmpdir = require('os-tmpdir')
 
 let tempDir = path.join(osTmpdir(), 'mvu_test_dir')
-GitHandler.repoLocation = tempDir
+GitHandler.repositoryLocation = tempDir
 
 describe('GitHandler', () => {
   beforeEach(() => {

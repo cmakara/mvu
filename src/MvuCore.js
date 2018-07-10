@@ -20,7 +20,7 @@ async function executeUpgradeStep(stepToExecute, message) {
 }
 
 async function executeUpgrade(workingDirectory, level) {
-  gitHandler.repoLocation = workingDirectory
+  gitHandler.setRepositoryPath(workingDirectory)
   await checkGitStatus()
   var config = await ConfigBuilder.buildConfig(workingDirectory)
   var newVersion = await VersionHandler.getNewVersion(config.currentVersion, level)

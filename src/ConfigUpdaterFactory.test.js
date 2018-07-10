@@ -3,7 +3,7 @@
 var chai = require('chai')
 var assert = chai.assert
 var expect = chai.expect
-var ConfigUpdaterFactory = require('../src/ConfigUpdaterFactory.js').ConfigUpdaterFactory
+var ConfigUpdaterFactory = require('./ConfigUpdaterFactory').ConfigUpdaterFactory
 
 describe('ConfigUpdaterFactory', () => {
   describe('create', () => {

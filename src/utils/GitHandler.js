@@ -1,12 +1,23 @@
 var simpleGit = require('simple-git')
 var map = Array.prototype.map
 
-this.repoLocation = __dirname
+const repositoryLocation = __dirname
 
-this.status = async () => {
+
+function setRepositoryPath(newPath) {
+  repositoryLocation = newPath
+  createEmptyFolder(repositoryLocation)
+  Logger.debug('Git repository path:', repositoryLocation)
+}
+
+function getRepositoryPath() {
+  return repositoryLocation
+}
+
+const status = async () => {
   let result = null
   return new Promise(async (resolve, reject) => {
-    await simpleGit(this.repoLocation).status(function (err, status) {
+    await simpleGit(repositoryLocation).status(function (err, status) {
       if (err !== null) {
         reject(err)
       }
@@ -18,9 +29,9 @@ this.status = async () => {
   })
 }
 
-this.getCurrentBranch = async () => {
+const getCurrentBranch = async () => {
   return new Promise(async (resolve) => {
-    await simpleGit(this.repoLocation).branch(function (err, summary) {
+    await simpleGit(repositoryLocation).branch(function (err, summary) {
       if (err !== null) {
         throw err
       }
@@ -31,8 +42,8 @@ this.getCurrentBranch = async () => {
 }
 
 // todo: handle remote name properly
-this.pushToRemote = async (elementToPush) => {
-  let repository = simpleGit(this.repoLocation).silent(true)
+const pushToRemote = async (elementToPush) => {
+  let repository = simpleGit(repositoryLocation).silent(true)
   return new Promise(async (resolve, reject) => {
     await repository.push(['origin', elementToPush], function (err, result) {
       if (err !== null) {
@@ -43,17 +54,17 @@ this.pushToRemote = async (elementToPush) => {
   })
 }
 
-this.pushBranch = async (branch) => {
-  return this.pushToRemote(branch)
+const pushBranch = async (branch) => {
+  return pushToRemote(branch)
 }
 
-this.pushTag = async (tag) => {
-  await this.pushToRemote(tag)
+const pushTag = async (tag) => {
+  await pushToRemote(tag)
 }
 
-this.createTag = async (tagName) => {
+const createTag = async (tagName) => {
   return new Promise(async (resolve, reject) => {
-    await simpleGit(this.repoLocation).addTag(tagName, function (err, result) {
+    await simpleGit(repositoryLocation).addTag(tagName, function (err, result) {
       if (err !== null) {
         reject(err)
       }
@@ -62,9 +73,9 @@ this.createTag = async (tagName) => {
   })
 }
 
-this.createCommit = async (message = '') => {
+const createCommit = async (message = '') => {
   return new Promise(async (resolve, reject) => {
-    await simpleGit(this.repoLocation).add('./*').commit(message, function (err, result) {
+    await simpleGit(repositoryLocation).add('./*').commit(message, function (err, result) {
       if (err !== null) {
         reject(err)
       }
@@ -73,14 +84,26 @@ this.createCommit = async (message = '') => {
   })
 }
 
-this.revertRepository = async (hard = true) => {
+const revertRepository = async (hard = true) => {
   let mode = hard ? '--hard' : '--soft'
   return new Promise(async (resolve, reject) => {
-    await simpleGit(this.repoLocation).reset([mode], function (err, result) {
+    await simpleGit(repositoryLocation).reset([mode], function (err, result) {
       if (err !== null) {
         reject(err)
       }
       resolve(result)
     })
   })
+}
+
+module.exports = {
+  status,
+  getCurrentBranch,
+  pushTag,
+  pushBranch,
+  createTag,
+  createCommit,
+  revertRepository,
+  getRepositoryPath,
+  setRepositoryPath
 }

@@ -15,7 +15,7 @@
   },
   "scripts": {
     "lint": "eslint 'src/**/*.js'",
-    "test": "mocha --require @babel/register ./tests/**",
+    "test": "mocha --require @babel/register ./src/**/*.test.js",
     "test:coverage": "nyc --check-coverage --lines 50 --reporter=text mocha --reporter mocha-junit-reporter ./tests/**",
     "babel:build": "babel src -d lib --delete-dir-on-start",
     "babel:watch": "babel src -d lib --delete-dir-on-start -w"
