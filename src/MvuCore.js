@@ -1,9 +1,9 @@
-var ora = require('ora')
-var ConfigBuilder = require('./ConfigBuilder.js')
-var gitHandler = require('./utils/GitHandler.js')
-var ConfigUpdaterFactory = require('./ConfigUpdaterFactory.js').ConfigUpdaterFactory
-var VersionHandler = require('./utils/VersionHandler.js')
-var Logger = require('./utils/Logger.js')
+import ora from 'ora'
+import ConfigBuilder from './ConfigBuilder'
+import gitHandler from './utils/GitHandler'
+import ConfigUpdaterFactory from './ConfigUpdaterFactory'
+import VersionHandler from './utils/VersionHandler'
+import Logger from './utils/Logger'
 var revertRepository = true
 const spinner = ora()
 

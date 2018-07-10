@@ -1,9 +1,10 @@
 /* eslint-env mocha */
 
-var Logger = require('./Logger')
-var winston = require('winston')
-var sinon = require('sinon')
-var assert = require('chai').assert
+import winston from 'winston'
+import sinon from 'sinon'
+import { assert } from 'chai'
+
+import Logger from './Logger'
 
 let loggerStub = null
 

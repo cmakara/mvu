@@ -1,8 +1,7 @@
 /* eslint-env mocha */
 
-var chai = require('chai')
-var assert = chai.assert
-var ConfigBuilder = require('./ConfigBuilder')
+import { assert } from 'chai'
+import ConfigBuilder from './ConfigBuilder'
 
 describe('MvuConfig', () => {
   describe('creation', () => {

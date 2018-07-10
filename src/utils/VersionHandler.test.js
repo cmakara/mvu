@@ -1,8 +1,7 @@
 /* eslint-env mocha */
 
-var chai = require('chai')
-var assert = chai.assert
-var VersionHandler = require('./VersionHandler')
+import { assert } from 'chai'
+import VersionHandler from './VersionHandler'
 
 describe('VersionHandler', () => {
   describe('getNewVersion', () => {

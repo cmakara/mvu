@@ -1,4 +1,4 @@
-var Logger = require('./Logger.js')
+import Logger from './Logger'
 
 const simpleErrorHandlerWithResult = (err) => {
   simpleErrorHandler(err)

@@ -1,12 +1,10 @@
 /* eslint-env mocha */
 
-var sinon = require('sinon')
-var chai = require('chai')
-var assert = chai.assert
-var expect = chai.expect
+import sinon from 'sinon'
+import { assert, expect } from 'chai'
 
+import Logger from './Logger'
 import { simpleErrorHandler, simpleErrorHandlerWithResult, simplePromiseRejectHandler } from './ErrorHandler'
-var Logger = require('./Logger')
 
 var loggerInfoStub = null
 var loggerDebugStub = null

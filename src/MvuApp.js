@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
-var gitHandler = require('./utils/GitHandler.js')
-var Logger = require('./utils/Logger.js')
-var ErrorHandler = require('./utils/ErrorHandler.js')
-var Core = require('./MvuCore.js')
-var program = require('commander')
-var packageJson = require('../package.json')
-var path = require('path')
-var ora = require('ora')
+import gitHandler from './utils/GitHandler'
+import Logger from './utils/Logger'
+import ErrorHandler from './utils/ErrorHandler'
+import Core from './MvuCore'
+import program from 'commander'
+import packageJson from '../package.json'
+import path from 'path'
+import ora from 'ora'
 
 program
   .version(packageJson.version)

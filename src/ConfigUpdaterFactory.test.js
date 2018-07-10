@@ -1,9 +1,8 @@
 /* eslint-env mocha */
 
-var chai = require('chai')
-var assert = chai.assert
-var expect = chai.expect
-var ConfigUpdaterFactory = require('./ConfigUpdaterFactory').ConfigUpdaterFactory
+import { assert, expect } from 'chai'
+
+import ConfigUpdaterFactory from './ConfigUpdaterFactory'
 
 describe('ConfigUpdaterFactory', () => {
   describe('create', () => {
