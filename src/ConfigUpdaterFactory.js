@@ -9,31 +9,32 @@ class ConfigUpdater {
     this.shortName = ''
     this.configFiles = configFiles
     this.getNewVersionLine = (line, version) => {
-      let oldVersion = this.versionLinePattern.exec(line)[1]
+      const oldVersion = this.versionLinePattern.exec(line)[1]
       return line.replace(oldVersion, version)
     }
     this.getVersionLine = (line) => this.versionLinePattern.exec(line) !== null
   }
 
   updateConfigFiles(newVersion, workingDirectory) {
-    for (let configFileName of Object.keys(this.configFiles)) {
+    for (var configFileName of Object.keys(this.configFiles)) {
       // Logger.info(`Updating ${this.shortName} config file ${configFileName}... \r`)
       spinner.start(`Updating ${this.shortName} config file: ${configFileName}`)
-      let configFilePath = path.resolve(workingDirectory, this.configFiles[configFileName])
+      const configFilePath = path.resolve(workingDirectory, this.configFiles[configFileName])
       if (!fs.existsSync(configFilePath)) {
-        let message = `${configFilePath} does not exist.`
+        const message = `${configFilePath} does not exist.`
         throw new Error(message)
       }
-      let rawConfig = fs.readFileSync(configFilePath, 'utf8')
-      let configLines = rawConfig.split('\n')
-      let targetLine = configLines.filter(this.getVersionLine)[0]
-      let targetIndex = configLines.indexOf(targetLine)
+      const rawConfig = fs.readFileSync(configFilePath, 'utf8')
+      const configLines = rawConfig.split('\n')
+      const targetLine = configLines.filter(this.getVersionLine)[0]
+      const targetIndex = configLines.indexOf(targetLine)
       configLines[targetIndex] = this.getNewVersionLine(targetLine, newVersion)
 
       fs.writeFileSync(configFilePath, configLines.join('\n'), 'utf8')
       // Logger.info(`Updating ${this.shortName} config file ${configFileName}... done.`)
       spinner.succeed()
     }
+
     return this.configFiles
   }
 }
@@ -123,7 +124,7 @@ class ConfigUpdaterFactory {
 
   getConfigFiles(technologyName) {
     if (this.updaterTypes[technologyName] === undefined) {
-      let message = `Not known technology: ${technologyName}`
+      const message = `Not known technology: ${technologyName}`
       throw new Error(message)
     }
     return this.updaterTypes[technologyName].ConfigFiles
@@ -136,7 +137,7 @@ class ConfigUpdaterFactory {
     } else if (name === 'custom') {
       return new CustomUpdater(configFiles, regex)
     } else {
-      let message = `Not known technology: ${name}`
+      const message = `Not known technology: ${name}`
       throw new Error(message)
     }
   }

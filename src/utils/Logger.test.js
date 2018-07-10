@@ -6,7 +6,7 @@ import { assert } from 'chai'
 
 import Logger from './Logger'
 
-let loggerStub = null
+var loggerStub = null
 
 describe('Logger', () => {
   beforeEach(() => {

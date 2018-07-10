@@ -20,14 +20,12 @@ function getRepositoryPath() {
 }
 
 const status = async () => {
-  let result = null
   return new Promise(async (resolve, reject) => {
     await simpleGit(repositoryLocation).status(function (err, status) {
       if (err !== null) {
         reject(err)
       }
-      result = status['files'].map(file => file['path'])
-      resolve(result)
+      resolve(status['files'].map(file => file['path']))
     })
   })
 }
@@ -46,7 +44,7 @@ const getCurrentBranch = async () => {
 
 // todo: handle remote name properly
 const pushToRemote = async (elementToPush) => {
-  let repository = simpleGit(repositoryLocation).silent(true)
+  const repository = simpleGit(repositoryLocation).silent(true)
   return new Promise(async (resolve, reject) => {
     await repository.push(['origin', elementToPush], function (err, result) {
       if (err !== null) {
@@ -88,7 +86,7 @@ const createCommit = async (message = '') => {
 }
 
 const revertRepository = async (hard = true) => {
-  let mode = hard ? '--hard' : '--soft'
+  const mode = hard ? '--hard' : '--soft'
   return new Promise(async (resolve, reject) => {
     await simpleGit(repositoryLocation).reset([mode], function (err, result) {
       if (err !== null) {

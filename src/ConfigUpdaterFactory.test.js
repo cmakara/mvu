@@ -41,7 +41,7 @@ describe('ConfigUpdaterFactory', () => {
   })
   describe('getConfigFiles', () => {
     it('should give back the correct config file name', () => {
-      let result = new ConfigUpdaterFactory().getConfigFiles('npm')
+      const result = new ConfigUpdaterFactory().getConfigFiles('npm')
       expect(result).include('package.json').and.include('npm-shrinkwrap.json')
     })
     it('should throw error on not know technology name', () => {

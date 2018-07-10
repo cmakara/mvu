@@ -22,16 +22,16 @@ async function executeUpgradeStep(stepToExecute, message) {
 async function executeUpgrade(workingDirectory, level) {
   gitHandler.setRepositoryPath(workingDirectory)
   await checkGitStatus()
-  var config = await ConfigBuilder.buildConfig(workingDirectory)
-  var newVersion = await VersionHandler.getNewVersion(config.currentVersion, level)
+  const config = await ConfigBuilder.buildConfig(workingDirectory)
+  const newVersion = await VersionHandler.getNewVersion(config.currentVersion, level)
   await config.updateVersion(newVersion)
   config.save(workingDirectory)
-  var filesToAdd = []
+  const filesToAdd = []
   filesToAdd = filesToAdd.concat([config.name])
   filesToAdd = filesToAdd.concat(await updateTechnologyConfigs(config, newVersion, workingDirectory))
   if (config.createCommit === true) {
     await executeUpgradeStep(async () => gitHandler.createCommit(await config.getCommitMessage(), filesToAdd), 'Committing changes')
-    let tag = await config.getTag()
+    const tag = await config.getTag()
     if (config.createTag === true) {
       await executeUpgradeStep(async () => gitHandler.createTag(tag), `Creating tag ${tag}`)
     }
@@ -53,8 +53,8 @@ async function checkGitStatus() {
 async function updateTechnologyConfigs(projectConfig, newVersion, workingDirectory) {
   var results = []
   Object.keys(projectConfig['technologies']).forEach((tech) => {
-    let techSection = projectConfig['technologies'][tech]
-    var res = new ConfigUpdaterFactory().create(tech, techSection.configFiles, techSection.regex).updateConfigFiles(newVersion, workingDirectory)
+    const techSection = projectConfig['technologies'][tech]
+    const res = new ConfigUpdaterFactory().create(tech, techSection.configFiles, techSection.regex).updateConfigFiles(newVersion, workingDirectory)
     results.push(res)
   })
   return results
@@ -65,7 +65,7 @@ function createConfig(pathToConfig) {
 }
 
 function getPrettyConfigurationVariables() {
-  let configurationVariables = ConfigBuilder.configurationVariables
+  const configurationVariables = ConfigBuilder.configurationVariables
   return Object.keys(configurationVariables).map((variable) => `{${variable}} - ${configurationVariables[variable]} `).join('\n')
 }
 

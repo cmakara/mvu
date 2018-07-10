@@ -15,24 +15,24 @@ class Logger {
     })
   }
 
-  info(msg) {
-    this.logger.info(msg)
+  info(message) {
+    this.logger.info(message)
   }
 
-  warn(msg) {
-    this.logger.warn(msg)
+  warn(message) {
+    this.logger.warn(message)
   }
 
-  error(msg) {
-    this.logger.error(msg)
+  error(message) {
+    this.logger.error(message)
   }
 
-  verbose(msg) {
-    this.logger.log('verbose', msg)
+  verbose(message) {
+    this.logger.log('verbose', message)
   }
 
-  debug(msg) {
-    this.logger.debug(msg)
+  debug(message) {
+    this.logger.debug(message)
   }
 
   setLevel(level) {
