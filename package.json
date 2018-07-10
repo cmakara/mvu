@@ -13,10 +13,19 @@
     "type": "git",
     "url": "https://github.com/cmakara/mvu"
   },
+  "nyc": {
+    "exclude": [
+      "lib",
+      "node_modules",
+      "bin",
+      "coverage",
+      "src/**/*.test.js"
+    ]
+  },
   "scripts": {
     "lint": "eslint 'src/**/*.js'",
     "test": "mocha --require @babel/register ./src/**/*.test.js",
-    "test:coverage": "nyc --check-coverage --lines 50 --reporter=text mocha --reporter mocha-junit-reporter ./tests/**",
+    "test:coverage": "nyc --all --require @babel/register node_modules/.bin/mocha src/**/*.test.js",
     "babel:build": "babel src -d lib --delete-dir-on-start",
     "babel:watch": "babel src -d lib --delete-dir-on-start -w"
   },
