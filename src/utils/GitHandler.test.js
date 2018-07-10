@@ -9,7 +9,7 @@ var fs = require('fs')
 var osTmpdir = require('os-tmpdir')
 
 let tempDir = path.join(osTmpdir(), 'mvu_test_dir')
-GitHandler.repositoryLocation = tempDir
+GitHandler.setRepositoryPath(tempDir)
 
 describe('GitHandler', () => {
   beforeEach(() => {

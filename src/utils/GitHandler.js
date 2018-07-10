@@ -1,12 +1,17 @@
-var simpleGit = require('simple-git')
-var map = Array.prototype.map
+import rimraf from 'rimraf'
+import fs from 'fs'
+import simpleGit from 'simple-git'
 
-const repositoryLocation = __dirname
+import Logger from './Logger'
 
+var repositoryLocation = __dirname
 
 function setRepositoryPath(newPath) {
   repositoryLocation = newPath
-  createEmptyFolder(repositoryLocation)
+  if (fs.existsSync(repositoryLocation)) {
+    rimraf.sync(repositoryLocation)
+  }
+  fs.mkdirSync(repositoryLocation)
   Logger.debug('Git repository path:', repositoryLocation)
 }
 
@@ -21,9 +26,7 @@ const status = async () => {
       if (err !== null) {
         reject(err)
       }
-      result = map.call(status['files'], function (file) {
-        return file['path']
-      })
+      result = status['files'].map(file => file['path'])
       resolve(result)
     })
   })
