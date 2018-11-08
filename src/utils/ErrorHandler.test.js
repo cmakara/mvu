@@ -1,10 +1,10 @@
 /* eslint-env mocha */
 
-var sinon = require('sinon')
-var chai = require('chai')
-var assert = chai.assert
-var ErrorHandler = require('./../../src/utils/ErrorHandler.js')
-var Logger = require('../../src/utils/Logger')
+import sinon from 'sinon'
+import { assert, expect } from 'chai'
+
+import Logger from './Logger'
+import { simpleErrorHandler, simpleErrorHandlerWithResult, simplePromiseRejectHandler } from './ErrorHandler'
 
 var loggerInfoStub = null
 var loggerDebugStub = null
@@ -25,52 +25,52 @@ describe('ErrorHandler', () => {
 
   describe('simpleErrorHandlerWithResult', () => {
     it('should log error message', () => {
-      ErrorHandler.simpleErrorHandlerWithResult(new Error('sampleMessage'), 'someresult')
+      simpleErrorHandlerWithResult(new Error('sampleMessage'), 'someresult')
       assert(loggerErrorStub.calledOnce)
     })
 
     it('should log debug message', () => {
-      ErrorHandler.simpleErrorHandlerWithResult(new Error('sampleMessage'), 'someresult')
+      simpleErrorHandlerWithResult(new Error('sampleMessage'), 'someresult')
       assert(loggerDebugStub.calledOnce)
     })
 
     it('called with null does nothing', () => {
-      ErrorHandler.simpleErrorHandlerWithResult(null)
+      simpleErrorHandlerWithResult(null)
       assert(loggerErrorStub.callCount === 0)
     })
   })
 
   describe('simpleErrorHandler', () => {
     it('should log error message', () => {
-      ErrorHandler.simpleErrorHandler(new Error('sampleMessage'))
+      simpleErrorHandler(new Error('sampleMessage'))
       assert(loggerErrorStub.calledOnce)
     })
 
     it('should log debug message', () => {
-      ErrorHandler.simpleErrorHandler(new Error('sampleMessage'))
+      simpleErrorHandler(new Error('sampleMessage'))
       assert(loggerDebugStub.calledOnce)
     })
 
     it('called with null does nothing', () => {
-      ErrorHandler.simpleErrorHandler(null)
+      simpleErrorHandler(null)
       assert(loggerErrorStub.callCount === 0)
     })
   })
 
   describe('simplePromiseRejectHandler', () => {
     it('should log reason as error', () => {
-      ErrorHandler.simplePromiseRejectHandler('reason', 'promise')
+      simplePromiseRejectHandler('reason', 'promise')
       assert(loggerErrorStub.calledWith('reason'))
     })
 
     it('should log promise as debug', () => {
-      ErrorHandler.simplePromiseRejectHandler('reason', 'promise')
+      simplePromiseRejectHandler('reason', 'promise')
       assert(loggerDebugStub.calledWith('promise'))
     })
 
     it('called with null does nothing', () => {
-      ErrorHandler.simplePromiseRejectHandler(null)
-      assert(loggerErrorStub.callCount === 0)
+      simplePromiseRejectHandler(null)
+      expect(loggerErrorStub.callCount).to.equal(0)
     })
   })
 })

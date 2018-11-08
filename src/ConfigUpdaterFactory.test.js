@@ -1,9 +1,8 @@
 /* eslint-env mocha */
 
-var chai = require('chai')
-var assert = chai.assert
-var expect = chai.expect
-var ConfigUpdaterFactory = require('../src/ConfigUpdaterFactory.js').ConfigUpdaterFactory
+import { assert, expect } from 'chai'
+
+import ConfigUpdaterFactory from './ConfigUpdaterFactory'
 
 describe('ConfigUpdaterFactory', () => {
   describe('create', () => {
@@ -42,7 +41,7 @@ describe('ConfigUpdaterFactory', () => {
   })
   describe('getConfigFiles', () => {
     it('should give back the correct config file name', () => {
-      let result = new ConfigUpdaterFactory().getConfigFiles('npm')
+      const result = new ConfigUpdaterFactory().getConfigFiles('npm')
       expect(result).include('package.json').and.include('npm-shrinkwrap.json')
     })
     it('should throw error on not know technology name', () => {

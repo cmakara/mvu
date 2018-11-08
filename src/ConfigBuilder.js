@@ -1,19 +1,20 @@
-var inquirer = require('inquirer')
-var Logger = require('./utils/Logger.js')
-var fs = require('fs')
-var path = require('path')
+import inquirer from 'inquirer'
+import fs from 'fs'
+import path from 'path'
 
-var configUpdaterFactory = new (require('./ConfigUpdaterFactory.js').ConfigUpdaterFactory)()
+import Logger from './utils/Logger'
 
-var defaultConfigName = 'mvu.json'
-var obsoleteConfigName = 'phlox.json'
+const configUpdaterFactory = new (require('./ConfigUpdaterFactory.js').ConfigUpdaterFactory)()
 
-var configurationVariables = {
+const defaultConfigName = 'mvu.json'
+const obsoleteConfigName = 'phlox.json'
+
+const configurationVariables = {
   'newVersion': 'the version after modification',
   'currentVersion': 'the version before modification'
 }
 
-let technologySelection = [
+const technologySelection = [
   {
     type: 'checkbox',
     message: 'Select technologies',
@@ -37,7 +38,7 @@ let technologySelection = [
   }
 ]
 
-var configPathQuestion = [
+const configPathQuestion = [
   {
     type: 'input',
     name: 'filePath',
@@ -48,7 +49,7 @@ var configPathQuestion = [
   }
 ]
 
-var configQuestions = [
+const configQuestions = [
   {
     type: 'input',
     name: 'currentVersion',
@@ -92,7 +93,7 @@ var configQuestions = [
 ]
 
 class MvuConfig {
-  constructor (projectConfig) {
+  constructor(projectConfig) {
     this.currentVersion = projectConfig['currentVersion']
     configurationVariables['currentVersion'] = this.currentVersion
     this.createCommit = projectConfig['createCommit'] || projectConfig['commit']
@@ -103,23 +104,23 @@ class MvuConfig {
     this.updateIfNeeded()
   }
 
-  async updateVersion (newVersion) {
+  async updateVersion(newVersion) {
     this.currentVersion = newVersion
     configurationVariables['newVersion'] = newVersion
   }
 
-  async getCommitMessage () {
+  async getCommitMessage() {
     return resolveVariables(this.commitMessage)
   }
 
-  async getTag () {
+  async getTag() {
     return resolveVariables(this.tagPattern)
   }
 
-  updateIfNeeded () {
-    for (let tech in this.technologies) {
+  updateIfNeeded() {
+    for (var tech in this.technologies) {
       if ((typeof this.technologies[tech]) !== 'object') {
-        let oldValue = this.technologies[tech]
+        const oldValue = this.technologies[tech]
         this.technologies[tech] = {}
         this.technologies[tech]['configFiles'] = {}
         this.technologies[tech]['configFiles'][oldValue] = oldValue
@@ -127,13 +128,13 @@ class MvuConfig {
     }
   }
 
-  async save (configPath) {
+  async save(configPath) {
     fs.writeFileSync(path.resolve(configPath, defaultConfigName), JSON.stringify(this, null, '  ', 'utf8'))
   }
 }
 
-async function prepareQuestion (tech, config) {
-  let customizedConfigPathQuestion = JSON.parse(JSON.stringify(configPathQuestion.slice()))
+async function prepareQuestion(tech, config) {
+  const customizedConfigPathQuestion = JSON.parse(JSON.stringify(configPathQuestion.slice()))
   customizedConfigPathQuestion[0]['message'] = `(${tech}) Where is the file '${config}' located?`
   customizedConfigPathQuestion[0]['default'] = () => {
     return config
@@ -142,21 +143,21 @@ async function prepareQuestion (tech, config) {
 }
 
 this.createConfig = async (configPath) => {
-  let configDict = {}
-  let configFullPath = path.resolve(configPath, defaultConfigName)
+  const configDict = {}
+  const configFullPath = path.resolve(configPath, defaultConfigName)
   inquirer.prompt(configQuestions).then(async (answers) => {
     configDict = answers
     inquirer.prompt(technologySelection).then(async (answers) => {
       configDict['technologies'] = {}
-      let result = getPathForTechs(configDict, answers)
-      writeConfig(await result, configFullPath)
+      const result = await getPathForTechs(configDict, answers)
+      writeConfig(result, configFullPath)
     })
   })
 }
 
 this.buildConfig = async (configPath) => {
-  let projectConfig = {}
-  let configFullPath = path.resolve(configPath, defaultConfigName)
+  var projectConfig = {}
+  const configFullPath = path.resolve(configPath, defaultConfigName)
 
   // convert old configuration file if present
   if (fs.existsSync(path.resolve(configPath, obsoleteConfigName))) {
@@ -164,7 +165,7 @@ this.buildConfig = async (configPath) => {
   }
 
   if (fs.existsSync(configFullPath)) {
-    let configData = fs.readFileSync(configFullPath, 'utf8')
+    const configData = fs.readFileSync(configFullPath, 'utf8')
     try {
       projectConfig = JSON.parse(configData)
     } catch (e) {
@@ -176,42 +177,42 @@ this.buildConfig = async (configPath) => {
   return new MvuConfig(projectConfig)
 }
 
-async function getPathForTechs (configDict, answers) {
-  for (let tech of Object.values(answers)[0]) {
+async function getPathForTechs(configDict, answers) {
+  for (var tech of Object.values(answers)[0]) {
     configDict['technologies'][tech] = {}
     configDict['technologies'][tech]['configFiles'] = {}
-    for (let config of configUpdaterFactory.getConfigFiles(tech.toLowerCase())) {
-      let pathQuestion = await prepareQuestion(tech, config)
-      let result = await getPathForTech(pathQuestion)
+    for (var config of configUpdaterFactory.getConfigFiles(tech.toLowerCase())) {
+      const pathQuestion = await prepareQuestion(tech, config)
+      const result = await getPathForTech(pathQuestion)
       configDict['technologies'][tech]['configFiles'][config] = result
     }
   }
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve) {
     resolve(configDict)
   })
 }
 
-async function getPathForTech (customizedConfigPathQuestion) {
-  let result = await inquirer.prompt(customizedConfigPathQuestion)
-  return new Promise(async (resolve, reject) => {
+async function getPathForTech(customizedConfigPathQuestion) {
+  const result = await inquirer.prompt(customizedConfigPathQuestion)
+  return new Promise(async (resolve) => {
     resolve(result['filePath'])
   })
 }
 
-function writeConfig (configDict, configPath) {
+function writeConfig(configDict, configPath) {
   fs.writeFileSync(configPath, JSON.stringify(configDict, null, '  '))
   Logger.info(`Configuration file created (${configPath})`)
   Logger.info('Please commit this file into version control!')
 }
 
-async function resolveVariables (stringToResolve) {
-  let variableRegex = /(\{[a-zA-Z]*\})/g
-  let result = stringToResolve
-  let match = null
-  while ((match = variableRegex.exec(stringToResolve)) != null) {
-    let element = match[0]
-    let strippedElement = element.replace('{', '').replace('}', '')
-    if (configurationVariables[strippedElement] == null) {
+async function resolveVariables(stringToResolve) {
+  const variableRegex = /(\{[a-zA-Z]*\})/g
+  var result = stringToResolve
+  var match
+  while ((match = variableRegex.exec(stringToResolve)) !== null) {
+    const element = match[0]
+    const strippedElement = element.replace('{', '').replace('}', '')
+    if (configurationVariables[strippedElement] === null) {
       throw new Error(`Unknown variable: ${strippedElement}`)
     }
     result = result.replace(element, configurationVariables[strippedElement])

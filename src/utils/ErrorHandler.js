@@ -1,19 +1,25 @@
-var Logger = require('./Logger.js')
+import Logger from './Logger'
 
-this.simpleErrorHandlerWithResult = (err, result) => {
-  this.simpleErrorHandler(err)
+const simpleErrorHandlerWithResult = (error) => {
+  simpleErrorHandler(error)
 }
 
-this.simpleErrorHandler = (err) => {
-  if (err != null) {
-    Logger.error(err.message)
-    Logger.debug(err.stack)
+const simpleErrorHandler = (error) => {
+  if (error) {
+    Logger.error(error.message)
+    Logger.debug(error.stack)
   }
 }
 
-this.simplePromiseRejectHandler = (reason, p) => {
-  if (p != null) {
+const simplePromiseRejectHandler = (reason, promise) => {
+  if (promise) {
     Logger.error(reason)
-    Logger.debug(p)
+    Logger.debug(promise)
   }
+}
+
+module.exports = {
+  simplePromiseRejectHandler,
+  simpleErrorHandler,
+  simpleErrorHandlerWithResult
 }

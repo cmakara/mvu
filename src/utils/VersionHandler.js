@@ -1,9 +1,10 @@
-this.getNewVersion = async (version, level) => {
-  let versionRegexp = /(\d+)\.(\d+)\.(\d+)/g
-  let match = versionRegexp.exec(version)
-  let major = parseInt(match[1])
-  let minor = parseInt(match[2])
-  let patch = parseInt(match[3])
+const getVersionComponents = (version) => {
+  const versionRegexp = /(\d+)\.(\d+)\.(\d+)/g
+  return versionRegexp.exec(version).slice(1).map(versionComponent => parseInt(versionComponent))
+}
+
+const getNewVersion = async (version, level) => {
+  const [major, minor, patch] = getVersionComponents(version)
   switch (level) {
     case 'major':
       return `${major + 1}.0.0`
@@ -12,4 +13,8 @@ this.getNewVersion = async (version, level) => {
     case 'patch':
       return `${major}.${minor}.${patch + 1}`
   }
+}
+
+module.exports = {
+  getNewVersion
 }

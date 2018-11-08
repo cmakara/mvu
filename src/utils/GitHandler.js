@@ -1,27 +1,39 @@
-var simpleGit = require('simple-git')
-var map = Array.prototype.map
+import rimraf from 'rimraf'
+import fs from 'fs'
+import simpleGit from 'simple-git'
 
-this.repoLocation = __dirname
+import Logger from './Logger'
 
-this.status = async () => {
-  let result = null
+var repositoryLocation = __dirname
+
+function setRepositoryPath(newPath) {
+  repositoryLocation = newPath
+  if (fs.existsSync(repositoryLocation)) {
+    rimraf.sync(repositoryLocation)
+  }
+  fs.mkdirSync(repositoryLocation)
+  Logger.debug('Git repository path:', repositoryLocation)
+}
+
+function getRepositoryPath() {
+  return repositoryLocation
+}
+
+const status = async () => {
   return new Promise(async (resolve, reject) => {
-    await simpleGit(this.repoLocation).status(function (err, status) {
-      if (err != null) {
+    await simpleGit(repositoryLocation).status(function (err, status) {
+      if (err !== null) {
         reject(err)
       }
-      result = map.call(status['files'], function (file) {
-        return file['path']
-      })
-      resolve(result)
+      resolve(status['files'].map(file => file['path']))
     })
   })
 }
 
-this.getCurrentBranch = async () => {
-  return new Promise(async (resolve, reject) => {
-    await simpleGit(this.repoLocation).branch(function (err, summary) {
-      if (err != null) {
+const getCurrentBranch = async () => {
+  return new Promise(async (resolve) => {
+    await simpleGit(repositoryLocation).branch(function (err, summary) {
+      if (err !== null) {
         throw err
       }
 
@@ -31,11 +43,11 @@ this.getCurrentBranch = async () => {
 }
 
 // todo: handle remote name properly
-this.pushToRemote = async (elementToPush) => {
-  let repository = simpleGit(this.repoLocation).silent(true)
+const pushToRemote = async (elementToPush) => {
+  const repository = simpleGit(repositoryLocation).silent(true)
   return new Promise(async (resolve, reject) => {
     await repository.push(['origin', elementToPush], function (err, result) {
-      if (err != null) {
+      if (err !== null) {
         reject(err)
       }
       resolve(result)
@@ -43,18 +55,18 @@ this.pushToRemote = async (elementToPush) => {
   })
 }
 
-this.pushBranch = async (branch) => {
-  return this.pushToRemote(branch)
+const pushBranch = async (branch) => {
+  return pushToRemote(branch)
 }
 
-this.pushTag = async (tag) => {
-  await this.pushToRemote(tag)
+const pushTag = async (tag) => {
+  await pushToRemote(tag)
 }
 
-this.createTag = async (tagName, message = '') => {
+const createTag = async (tagName) => {
   return new Promise(async (resolve, reject) => {
-    await simpleGit(this.repoLocation).addTag(tagName, function (err, result) {
-      if (err != null) {
+    await simpleGit(repositoryLocation).addTag(tagName, function (err, result) {
+      if (err !== null) {
         reject(err)
       }
       resolve(result)
@@ -62,10 +74,10 @@ this.createTag = async (tagName, message = '') => {
   })
 }
 
-this.createCommit = async (message = '', filesToAdd = []) => {
+const createCommit = async (message = '') => {
   return new Promise(async (resolve, reject) => {
-    await simpleGit(this.repoLocation).add('./*').commit(message, function (err, result) {
-      if (err != null) {
+    await simpleGit(repositoryLocation).add('./*').commit(message, function (err, result) {
+      if (err !== null) {
         reject(err)
       }
       resolve(result)
@@ -73,14 +85,26 @@ this.createCommit = async (message = '', filesToAdd = []) => {
   })
 }
 
-this.revertRepository = async (hard = true) => {
-  let mode = hard ? '--hard' : '--soft'
+const revertRepository = async (hard = true) => {
+  const mode = hard ? '--hard' : '--soft'
   return new Promise(async (resolve, reject) => {
-    await simpleGit(this.repoLocation).reset([mode], function (err, result) {
-      if (err != null) {
+    await simpleGit(repositoryLocation).reset([mode], function (err, result) {
+      if (err !== null) {
         reject(err)
       }
       resolve(result)
     })
   })
+}
+
+module.exports = {
+  status,
+  getCurrentBranch,
+  pushTag,
+  pushBranch,
+  createTag,
+  createCommit,
+  revertRepository,
+  getRepositoryPath,
+  setRepositoryPath
 }

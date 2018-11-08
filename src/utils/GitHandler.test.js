@@ -1,15 +1,14 @@
 /* eslint-env mocha */
 
-var GitHandler = require('../../src/utils/GitHandler.js')
-var path = require('path')
-var chai = require('chai')
-var expect = chai.expect
-var childProcess = require('child_process')
-var fs = require('fs')
-var osTmpdir = require('os-tmpdir')
+import GitHandler from './GitHandler'
+import path from 'path'
+import { expect } from 'chai'
+import childProcess from 'child_process'
+import fs from 'fs'
+import osTmpdir from 'os-tmpdir'
 
-let tempDir = path.join(osTmpdir(), 'mvu_test_dir')
-GitHandler.repoLocation = tempDir
+var tempDir = path.join(osTmpdir(), 'mvu_test_dir')
+GitHandler.setRepositoryPath(tempDir)
 
 describe('GitHandler', () => {
   beforeEach(() => {
@@ -36,7 +35,7 @@ describe('GitHandler', () => {
   })
 })
 
-var deleteFolderRecursive = function (path) {
+const deleteFolderRecursive = function (path) {
   if (fs.existsSync(path)) {
     fs.readdirSync(path).forEach(function (file) {
       var curPath = path + '/' + file
